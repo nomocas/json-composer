@@ -1,0 +1,51 @@
+{
+  "name": "json-composer",
+  "version": "1.0.0",
+  "description": "JSON composition tools",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=8.5.0"
+  },
+  "scripts": {
+    "lint": "eslint src test",
+    "pretest": "npm run lint",
+    "test": "jest --forceExit test",
+    "cover": "jest --forceExit --coverage test",
+    "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls",
+    "prepublish": "npm test",
+    "precommit": "npm run lint",
+    "prepush": "npm test",
+    "commitmsg": "validate-commit-msg",
+    "cmtz": "git-cz",
+    "release": "standard-version"
+  },
+  "keywords": [
+    "json",
+    "composition",
+    "recursive"
+  ],
+  "author": "Gilles Coomans",
+  "license": "MIT",
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "commitizen": "^2.9.6",
+    "coveralls": "^2.13.0",
+    "cz-conventional-changelog": "^2.0.0",
+    "eslint": "^3.15.0",
+    "eslint-plugin-import": "^2.2.0",
+    "husky": "^0.13.3",
+    "jest": "^22.0.4",
+    "lodash.clonedeep": "^4.5.0",
+    "standard-version": "^4.0.0",
+    "validate-commit-msg": "^2.12.1"
+  },
+  "dependencies": {
+    "lodash.defaultsdeep": "^4.6.0",
+    "lodash.merge": "^4.6.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

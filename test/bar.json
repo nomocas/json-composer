@@ -1,0 +1,6 @@
+{
+    "zoo": "bidoo",
+    "bloupi": {
+        ">>": ["./bru.json", "./bro.json"]
+    }
+}

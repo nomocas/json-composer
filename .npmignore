@@ -1,0 +1,9 @@
+.nyc_output
+coverage
+node_modules
+.coveralls.yml
+.babelrc
+.gitignore
+.travis.yml
+rollup.config.js
+test/
