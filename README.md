@@ -44,7 +44,7 @@ async function resolver(cwd, filePath) {
 // ********** end resolver *************
 
 try {
-    resolver(__dirname, './composed.json')
+    resolver('/', './composed.json')
         .then(r => console.log('extended', r))
         .catch(e => console.error('error', e));
 } catch (e) {
