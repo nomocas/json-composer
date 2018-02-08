@@ -1,5 +1,4 @@
 /* global describe, it, expect, afterEach */
-/* eslint no-console:0 */
 const Composer = require('../src/index');
 const path = require('path');
 const cloneDeep = require('lodash.clonedeep');

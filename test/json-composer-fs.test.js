@@ -1,13 +1,10 @@
 /* global describe, it, expect, afterEach */
-/* eslint no-console:0 */
 const Composer = require('../src/index');
 const path = require('path');
-
-
 const fs = require('fs');
 const util = require('util');
 const readFile = util.promisify(fs.readFile);
-/* istanbul ignore next */
+
 async function readJSON(jsonPath) {
 	try {
 		const content = await readFile(jsonPath, 'utf8');
@@ -21,16 +18,6 @@ async function resolver(cwd, filePath) {
 	const fp = path.resolve(cwd, filePath);
 	return Composer.extend(await readJSON(fp), fp, resolver);
 }
-
-// try {
-// 	resolver(__dirname, './composed.json')
-// 		.then(r => console.log('extended', r))
-// 		.catch(e => console.error('error', e));
-// } catch (e) {
-// 	console.error('error', e);
-// }
-
-
 
 describe('composition through fs', () => {
 
