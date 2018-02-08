@@ -54,21 +54,21 @@ try {
 
 Then imagine files as this : 
 
-__/bru.json__
+__./bru.json__
 ```json 
 {
     "bru": true
 }
 ```
 
-__/bro.json__
+__./bro.json__
 ```json 
 {
     "bro": 1234
 }
 ```
 
-__/bar.json__
+__./bar.json__
 ```json 
 {
     "zoo": "bidoo",
@@ -78,7 +78,7 @@ __/bar.json__
 }
 ```
 
-__/composed.json__
+__./composed.json__
 ```json 
 {
     ">>foo": "./bar.json",
