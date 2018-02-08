@@ -20,68 +20,61 @@ async function resolver(cwd, filePath) {
 }
 
 describe('composition through fs', () => {
-
 	const composedPath = path.resolve(__dirname, './composed.json');
 	afterEach(() => {});
 
 	describe('should bind click event', () => {
-		it('set exactly one event', () => {
-			return Composer.extend({
+		it('set exactly one event', async () => {
+			const json = await Composer.extend({
 				">>foo": "./bar.json",
 				hello: "world"
-			}, composedPath, resolver)
-				.then(json =>
-					expect(json)
-					.toEqual({
-						hello: "world",
-						foo: {
-							zoo: "bidoo",
-							bloupi: {
-								bru: true,
-								bro: 1234
-							}
-						}
-					})
-				);
-		});
-	});
-	describe('should bind click event', () => {
-		it('set exactly one event', () => {
-			return Composer.extend({
-				">>": "./bar.json",
-				hello: "world"
-			}, composedPath, resolver)
-				.then(json =>
-					expect(json)
-					.toEqual({
-						hello: "world",
+			}, composedPath, resolver);
+			expect(json)
+				.toEqual({
+					hello: "world",
+					foo: {
 						zoo: "bidoo",
 						bloupi: {
 							bru: true,
 							bro: 1234
 						}
-					})
-				);
+					}
+				});
+		});
+	});
+	describe('should bind click event', () => {
+		it('set exactly one event', async () => {
+			const json = await Composer.extend({
+				">>": "./bar.json",
+				hello: "world"
+			}, composedPath, resolver);
+			expect(json)
+				.toEqual({
+					hello: "world",
+					zoo: "bidoo",
+					bloupi: {
+						bru: true,
+						bro: 1234
+					}
+				});
 		});
 	});
 
 	describe('should bind click event', () => {
-		it('set exactly one event', () => {
-			return Composer.extend({
+		it('set exactly one event', async () => {
+			const json = await Composer.extend({
 				">>": ["./bar.json"],
 				hello: "world"
-			}, composedPath, resolver)
-				.then(json =>
-					expect(json)
-					.toEqual({
-						hello: "world",
-						zoo: "bidoo",
-						bloupi: {
-							bru: true,
-							bro: 1234
-						}
-					})
-				);
+			}, composedPath, resolver);
+			expect(json)
+				.toEqual({
+					hello: "world",
+					zoo: "bidoo",
+					bloupi: {
+						bru: true,
+						bro: 1234
+					}
+				});
 		});
 	});
 });
