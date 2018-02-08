@@ -33,65 +33,59 @@ describe('composition through fixtures', () => {
 	afterEach(() => {});
 
 	describe('should bind click event', () => {
-		it('set exactly one event', () => {
-			return Composer.extend({
+		it('set exactly one event', async () => {
+			const json = await Composer.extend({
 				">>foo": "./bar.json",
 				hello: "world"
-			}, '/composed.json', resolver)
-				.then(json =>
-					expect(json)
-					.toEqual({
-						hello: "world",
-						foo: {
-							zoo: "bidoo",
-							bloupi: {
-								bru: true,
-								bro: 1234
-							}
+			}, '/composed.json', resolver);
+			expect(json)
+				.toEqual({
+					hello: "world",
+					foo: {
+						zoo: "bidoo",
+						bloupi: {
+							bru: true,
+							bro: 1234
 						}
-					})
-				);
+					}
+				});
 		});
 	});
 
 
 	describe('should bind click event', () => {
-		it('set exactly one event', () => {
-			return Composer.extend({
+		it('set exactly one event', async () => {
+			const json = await Composer.extend({
 				">>": "./bar.json",
 				hello: "world"
-			}, '/composed.json', resolver)
-				.then(json =>
-					expect(json)
-					.toEqual({
-						hello: "world",
-						zoo: "bidoo",
-						bloupi: {
-							bru: true,
-							bro: 1234
-						}
-					})
-				);
+			}, '/composed.json', resolver);
+			expect(json)
+				.toEqual({
+					hello: "world",
+					zoo: "bidoo",
+					bloupi: {
+						bru: true,
+						bro: 1234
+					}
+				});
 		});
 	});
 
 	describe('should bind click event', () => {
-		it('set exactly one event', () => {
-			return Composer.extend({
+		it('set exactly one event', async () => {
+			const json = await Composer.extend({
 				">>": ["./bar.json"],
 				hello: "world"
-			}, '/composed.json', resolver)
-				.then(json =>
-					expect(json)
-					.toEqual({
-						hello: "world",
-						zoo: "bidoo",
-						bloupi: {
-							bru: true,
-							bro: 1234
-						}
-					})
-				);
+			}, '/composed.json', resolver);
+			expect(json)
+				.toEqual({
+					hello: "world",
+					zoo: "bidoo",
+					bloupi: {
+						bru: true,
+						bro: 1234
+					}
+				});
 		});
 	});
 });
