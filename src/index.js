@@ -35,7 +35,7 @@ class JsonComposer {
 	}
 
 	loadPointer(json, key, jsonPath) {
-		debug('findPointer : ', json, key, jsonPath);
+		debug('loadPointer : ', json, key, jsonPath);
 		const descriptor = {
 			json,
 			key: (key.length > 2) ? key.substring(2) : key
