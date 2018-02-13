@@ -9,9 +9,75 @@
 [![bitHound Dev Dependencies](https://www.bithound.io/github/nomocas/json-composer/badges/devDependencies.svg)](https://www.bithound.io/github/nomocas/json-composer/master/dependencies/npm)
 [![licence](https://img.shields.io/npm/l/json-composer.svg)](https://spdx.org/licenses/MIT)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
 
 ## Usage
+
+Imagine json files as this : 
+
+__./bru.json__
+
+```javascript 
+{
+    "bru": true
+}
+```
+
+__./bro.json__
+
+```javascript 
+{
+    "bro": 1234,
+    "bra": "lollipop"
+}
+```
+
+__./bar.json__
+
+```javascript 
+{
+    "zoo": "bidoo",
+    "boo": {
+        ">>": ["./bru.json", "./bro.json"], // will be resolved and inherited
+        "bro": 5678
+    }
+}
+```
+
+__./composed.json__
+
+```javascript
+{
+    ">>foo": "./bar.json", // will be resolved and assigned
+    "hello": "world"
+}
+```
+
+Then using your resolver (see below) : 
+
+```javascript
+resolver(__dirname, './composed.json')
+    .then(r => console.log('extended :', r))
+    .catch(e => console.error('error', e));
+```
+
+Will print :
+
+```javascript
+{
+    hello: 'world', // from composed.json
+    foo: {  // has been assigned (from bar.json)
+        zoo: 'bidoo',   // has been inherited (from bar.json)
+        boo: { // has been inherited (from bar.json)
+            bru: true, // has been inherited (from bru.json)
+            bra: "lollipop", // has been inherited (from bro.json)
+            bro: 5678   // has been overrided  (inherited from bro)
+        }
+    }
+}
+```
+
+### Resolver
 
 You need to provide a resolver (example with json from fs) :
 
@@ -27,15 +93,22 @@ const readFile = util.promisify(fs.readFile);
 
 async function readJSON(jsonPath) {
     try {
-        const content = await readFile(jsonPath, 'utf8');
-        return JSON.parse(content);
+        return JSON.parse(await readFile(jsonPath, 'utf8'));
     } catch (e) {
-        console.error('Error while parsing : ', e); // eslint-disable-line no-console
+        console.error('Error while loading (%s) : ', jsonPath, e);
+        throw new Error('JSON composition failed.');
     }
 }
 
+/**
+ * @example
+ * const composed = await resolver(__dirname, './relative/path/to.json');
+ * 
+ * @example
+ * const composed = await resolver('/absolute/or/rel/path/from/current/cwd.json');
+ */
 async function resolver(cwd, filePath) {
-    const finalPath = path.resolve(cwd, filePath);
+    const finalPath = arguments.length === 2 ? path.resolve(cwd, filePath) : cwd;
 
     // don't forget to forward your resolver
     return Composer.extend(await readJSON(finalPath), finalPath, resolver);
@@ -43,65 +116,11 @@ async function resolver(cwd, filePath) {
 
 // ********** end resolver *************
 
-try {
-    resolver('/', './composed.json')
-        .then(r => console.log('extended', r))
-        .catch(e => console.error('error', e));
-} catch (e) {
-    console.error('error', e);
-}
-```
+// usage
 
-Then imagine files as this : 
-
-__./bru.json__
-```json 
-{
-    "bru": true
-}
-```
-
-__./bro.json__
-```json 
-{
-    "bro": 1234
-}
-```
-
-__./bar.json__
-```json 
-{
-    "zoo": "bidoo",
-    "bloupi": {
-        ">>": ["./bru.json", "./bro.json"]
-    }
-}
-```
-
-__./composed.json__
-```json 
-{
-    ">>foo": "./bar.json",
-    "hello": "world"
-}
-```
-
-Then using your resolver above : 
-
-```javascript
-try {
-    resolver(__dirname, './composed.json')
-        .then(r => console.log('extended :', r))
-        .catch(e => console.error('error', e));
-} catch (e) {
-    console.error('error', e);
-}
-```
-
-Will print :
-
-```shell
-> extended : { hello: 'world', foo: { zoo: 'bidoo', bloupi: { bru: true, bro: 1234 } } }
+resolver(__dirname, './composed.json')
+    .then(r => console.log('extended', r))
+    .catch(e => console.error('error', e));
 ```
 
 ## Licence
