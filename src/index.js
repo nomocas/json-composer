@@ -59,15 +59,13 @@ class JsonComposer {
 		this.promises.push(promise);
 	}
 
-	static extend(json, filePath, resolver) {
+	static async extend(json, filePath, resolver) {
 		debug('extend', json, filePath);
 		const report = new JsonComposer(filePath, resolver);
 		report.findPointer(json);
-		return Promise.all(report.promises)
-			.then(loaded => {
-				loaded.forEach(applyJson);
-				return json;
-			});
+		const loaded = await Promise.all(report.promises);
+		loaded.forEach(applyJson);
+		return json;
 	}
 }
 
