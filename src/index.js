@@ -1,11 +1,10 @@
 const bottom = require('lodash.defaultsdeep');
 const up = require('lodash.merge');
 const assert = require('assert');
-const debug = require('debug')('json-composer');
 const path = require('path');
+const debug = require('debug')('json-composer');
 
 function applyJson(descriptor) {
-	debug('applyJSON : ', descriptor);
 	if (descriptor.key === '>>') {
 		let value = descriptor.value;
 		if (descriptor.fromArray)
@@ -17,12 +16,13 @@ function applyJson(descriptor) {
 
 class JsonComposer {
 	constructor(filePath, resolver) {
+		assert(typeof resolver == 'function', 'JsonComposer need a resolver function at constructor time');
 		this.filePath = filePath;
 		this.fileDir = path.dirname(filePath);
 		this.resolver = resolver;
-		assert(typeof this.resolver == 'function', 'JsonComposer need a resolver function at constructor time');
 		this.promises = [];
 	}
+	
 	findPointer(json) {
 		debug('findPointer : ', json);
 		Object.keys(json)
@@ -54,13 +54,13 @@ class JsonComposer {
 		}));
 	}
 
-
 	waiting(promise) {
 		debug('waiting');
 		this.promises.push(promise);
 	}
 
 	static extend(json, filePath, resolver) {
+		debug('extend', json, filePath);
 		const report = new JsonComposer(filePath, resolver);
 		report.findPointer(json);
 		return Promise.all(report.promises)
